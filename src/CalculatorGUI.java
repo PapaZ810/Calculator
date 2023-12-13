@@ -3,8 +3,7 @@ import javax.swing.border.TitledBorder;
 import javax.swing.plaf.FontUIResource;
 import javax.swing.text.StyleContext;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.awt.event.*;
 import java.util.Locale;
 
 public class CalculatorGUI {
@@ -55,10 +54,10 @@ public class CalculatorGUI {
                         }
                     }
                 } else if (source.equals("+/-")) {
-                    if (calculateField.getText().contains("-")) {
+                    if (calculateField.getText().contains("~")) {
                         calculateField.setText(calculateField.getText().substring(1));
                     } else {
-                        calculateField.setText("-" + calculateField.getText());
+                        calculateField.setText("~" + calculateField.getText());
                     }
                 } else if (source.equals("AC")) {
                     calculateField.setText("0");
@@ -82,6 +81,11 @@ public class CalculatorGUI {
                     String expression = calculateField.getText();
                     String[] operands = expression.split("[+\\-*/]");
                     String[] operators = expression.split("[0-9.]+");
+                    for (int i = 0; i < operands.length; i++) {
+                        if (operands[i].contains("~")) {
+                            operands[i] = "-" + operands[i].substring(1);
+                        }
+                    }
                     double result = Double.parseDouble(operands[0]);
                     for (int i = 1; i < operands.length; i++) {
                         switch (operators[i]) {
@@ -91,7 +95,7 @@ public class CalculatorGUI {
                             case "/" -> result /= Double.parseDouble(operands[i]);
                         }
                     }
-                    calculateField.setText(Double.toString(result));
+                    calculateField.setText(Double.toString(result).replace("-", "~"));
                 }
             }
         };
@@ -115,6 +119,23 @@ public class CalculatorGUI {
         zero.addActionListener(listener);
         decimal.addActionListener(listener);
         equals.addActionListener(listener);
+        calculateField.addKeyListener(new KeyListener() {
+            @Override
+            public void keyTyped(KeyEvent e) {
+
+            }
+
+            @Override
+            public void keyPressed(KeyEvent e) {
+                if (e.getKeyCode() == KeyEvent.VK_ENTER)
+                    equals.doClick();
+            }
+
+            @Override
+            public void keyReleased(KeyEvent e) {
+
+            }
+        });
     }
 
     public static void main(String[] args) {
