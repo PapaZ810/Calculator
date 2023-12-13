@@ -122,7 +122,6 @@ public class CalculatorGUI {
         calculateField.addKeyListener(new KeyListener() {
             @Override
             public void keyTyped(KeyEvent e) {
-
             }
 
             @Override
@@ -133,7 +132,6 @@ public class CalculatorGUI {
 
             @Override
             public void keyReleased(KeyEvent e) {
-
             }
         });
     }
